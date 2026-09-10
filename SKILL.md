@@ -55,8 +55,9 @@ The agent MUST ask for one or more of the following inputs before proceeding:
 2. Fill in findings from Phase 1
 3. Include competitive context from [Competitive Analysis](./references/competitive-analysis.md)
 4. Recommend which features to adapt vs. which to redesign
-5. Define success metrics and KPIs
-6. Output: **Draft PRD** ready for stakeholder review
+5. Recommend "Wow Factor" features that leverage Duo capabilities for App Store featuring potential.
+6. Define success metrics and KPIs
+7. Output: **Draft PRD** ready for stakeholder review
 
 ### Phase 3: User Stories
 1. Reference the [User Stories Catalog](./references/user-stories-catalog.md)
@@ -70,9 +71,10 @@ The agent MUST ask for one or more of the following inputs before proceeding:
    - **Phase A (Launch-ready)**: Breaking issues + quick wins → Ship with Duo launch
    - **Phase B (Fast-follow)**: Split view, arrangement views → 1–2 sprints post-launch
    - **Phase C (Delight)**: Fold-aware features, pose-specific UX → Next quarter
-2. Estimate PM-level effort (S/M/L) per story
-3. Identify dependencies and risks
-4. Output: **Phasing Roadmap** with timeline recommendations
+2. Prioritize based on Effort vs. Impact (Business Value vs. Technical Cost)
+3. Estimate PM-level effort (S/M/L) per story
+4. Identify dependencies and risks
+5. Output: **Phasing Roadmap** with timeline recommendations
 
 ## Key Principles
 
@@ -84,6 +86,9 @@ The agent MUST ask for one or more of the following inputs before proceeding:
    Duo-specific features are enhancements, not requirements
 4. **Apple-native focus**: This skill is exclusively for iPhone Duo. Competitive
    references are for context only — all recommendations follow Apple HIG
+5. **Strategic Go-To-Market Focus**: Emphasize how being a Day 1 iPhone Duo app 
+   can drive user acquisition and App Store featuring. Factor Apple Ecosystem 
+   synergy (Continuity, Apple Watch) into the PRD.
 
 ## Reference Documents
 

@@ -8,12 +8,12 @@
 
 ## What Is This?
 
-An **Antigravity Agent Skill** that provides a structured, 4-phase workflow for
+An **Apple Duo Agent Skill** that provides a structured, 4-phase workflow for
 Product Managers to evaluate and plan the conversion of existing iOS apps to
 support iPhone Duo.
 
-The skill is installed globally at `~/.gemini/config/skills/iphone-duo-design-conversion/`
-and activates automatically when you ask about iPhone Duo conversion.
+The skill is provided as a set of Markdown files that can be easily loaded into
+your AI assistant (Claude, ChatGPT, Cursor, etc.) to guide the conversion process.
 
 ---
 
@@ -133,6 +133,26 @@ foldable app ecosystem is crowded; Apple's is fresh territory.
 │ Ship with Duo launch│    │ 1-2 sprints after   │    │ Next quarter        │
 └─────────────────────┘    └─────────────────────┘    └─────────────────────┘
 ```
+
+---
+
+## 🤖 Using with Claude, ChatGPT & Other AIs
+
+Because this skill is written in standard Markdown, you can easily use it with any GenAI tool:
+
+### Option 1: Claude Projects / Custom GPTs (Recommended)
+1. Download all files in this repository.
+2. Go to **Claude Projects** or **ChatGPT Custom GPT** creation.
+3. Upload all the `.md` files as **Project Knowledge** (Claude) or **Knowledge Files** (ChatGPT).
+4. Copy the content of `SKILL.md` and paste it into the **Custom Instructions / System Prompt** field.
+5. *How to use*: Just upload your app screenshots and type: *"Run the Phase 1 App Audit on these screenshots."*
+
+### Option 2: The "Mega-Prompt" Approach
+If you don't have access to Claude Projects or Custom GPTs, you can use the bundled `apple_duo_mega_prompt.md` file:
+1. Open `apple_duo_mega_prompt.md` (this file combines all instructions, checklists, and references into one massive text block).
+2. Copy the entire text.
+3. Start a new chat in Claude/ChatGPT and paste the text.
+4. Add your screenshots to the same message and hit Send.
 
 ---
 

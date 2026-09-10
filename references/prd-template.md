@@ -52,6 +52,15 @@ Detail how the vertical control layout affects navigation:
 | Top toolbar | Vertical side rail | Medium | [PM] |
 | Custom navigation | Requires redesign | High | [PM] |
 
+### 2.4 Apple Ecosystem Synergy (Duo WOW Factor)
+Identify opportunities to integrate Duo features with the broader Apple ecosystem:
+
+| Integration | Concept | User Value | Effort |
+|-------------|---------|------------|--------|
+| Handoff / Continuity | Seamless transition outer ↔ inner ↔ Mac/iPad | Very High | [AUTO] |
+| Dynamic Island | Outer display Live Activities | High | [PM] |
+| Apple Watch | Remote control / glanceable info while Duo is in Tent mode | Medium | [PM] |
+
 ---
 
 ## 3. Feature Requirements
