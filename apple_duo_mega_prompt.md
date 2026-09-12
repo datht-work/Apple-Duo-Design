@@ -40,24 +40,35 @@ The agent MUST ask for one or more of the following inputs before proceeding:
 
 ## Workflow: 4 Phases
 
+### Phase 0: App Category Detection (Automatic)
+Before starting the audit, identify the app's category and load the relevant
+audit profile from [App Category Guide](./references/app-category-guide.md):
+- Social/Feed, Messaging, Productivity, E-Commerce, Video/Streaming,
+  Maps/Navigation, Health/Fitness, Finance/Banking
+- Use the category's "Top 3 Duo Concerns" to prioritize audit focus
+- If user has already completed an earlier phase, skip to the requested phase
+
 ### Phase 1: App Audit
 1. Ask the user for app screenshots or Figma exports (see Accepted Inputs above)
-2. Analyze each screen against the [PM Checklist](./references/pm-checklist.md)
-3. Read the [HIG Summary](./references/hig-summary.md) for iPhone Duo requirements
-4. Identify impacted areas and classify by severity:
-   - 🔴 **Breaking** — Will not function correctly on Duo (e.g., fixed layouts, hardcoded widths)
-   - 🟡 **Suboptimal** — Works but misses Duo capabilities (e.g., no split view expansion)
+2. Identify the app category and load the matching profile from [App Category Guide](./references/app-category-guide.md)
+3. Analyze each screen against the [PM Checklist](./references/pm-checklist.md)
+4. Read the [HIG Summary](./references/hig-summary.md) for iPhone Duo requirements
+5. Classify findings by severity using the rules in [Audit Report Template](./references/audit-report-template.md):
+   - 🔴 **Breaking** — Will not function correctly on Duo (e.g., fixed layouts, odd-column grids, text-only tab bars)
+   - 🟡 **Suboptimal** — Works but misses Duo capabilities (e.g., no split view, no max-width on content)
    - 🟢 **Compatible** — Already adapts well (e.g., uses standard system components)
-5. Output: **Audit Report** with severity ratings per screen/component
+6. Reference [Visual Patterns](./references/visual-patterns.md) to show Before → After layout diagrams
+7. Output: **Audit Report** following the format in [Audit Report Template](./references/audit-report-template.md)
 
 ### Phase 2: PRD Generation
 1. Use the [PRD Template](./references/prd-template.md) as the base
 2. Fill in findings from Phase 1
 3. Include competitive context from [Competitive Analysis](./references/competitive-analysis.md)
 4. Recommend which features to adapt vs. which to redesign
-5. Recommend "Wow Factor" features that leverage Duo capabilities for App Store featuring potential.
-6. Define success metrics and KPIs
-7. Output: **Draft PRD** ready for stakeholder review
+5. Recommend "Wow Factor" features that leverage Duo capabilities for App Store featuring potential
+6. Include Apple Ecosystem Synergy opportunities (Continuity, Dynamic Island, Tent Mode)
+7. Define success metrics and KPIs
+8. Output: **Draft PRD** ready for stakeholder review
 
 ### Phase 3: User Stories
 1. Reference the [User Stories Catalog](./references/user-stories-catalog.md)
@@ -74,7 +85,9 @@ The agent MUST ask for one or more of the following inputs before proceeding:
 2. Prioritize based on Effort vs. Impact (Business Value vs. Technical Cost)
 3. Estimate PM-level effort (S/M/L) per story
 4. Identify dependencies and risks
-5. Output: **Phasing Roadmap** with timeline recommendations
+5. Include [Engineering Handoff](./references/engineering-handoff.md) checklist for Dev team
+6. Reference [QA Testing Guide](./references/qa-testing-guide.md) for test planning
+7. Output: **Phasing Roadmap** with timeline recommendations
 
 ## Key Principles
 
@@ -86,9 +99,11 @@ The agent MUST ask for one or more of the following inputs before proceeding:
    Duo-specific features are enhancements, not requirements
 4. **Apple-native focus**: This skill is exclusively for iPhone Duo. Competitive
    references are for context only — all recommendations follow Apple HIG
-5. **Strategic Go-To-Market Focus**: Emphasize how being a Day 1 iPhone Duo app 
-   can drive user acquisition and App Store featuring. Factor Apple Ecosystem 
+5. **Strategic Go-To-Market Focus**: Emphasize how being a Day 1 iPhone Duo app
+   can drive user acquisition and App Store featuring. Factor Apple Ecosystem
    synergy (Continuity, Apple Watch) into the PRD.
+6. **Output language**: Match the user's input language. If user writes in
+   Vietnamese, output in Vietnamese. If English, output in English.
 
 ## Reference Documents
 
@@ -98,7 +113,12 @@ The agent MUST ask for one or more of the following inputs before proceeding:
 | [PM Checklist](./references/pm-checklist.md) | Screen-by-screen audit checklist |
 | [PRD Template](./references/prd-template.md) | Ready-to-fill PRD for conversion projects |
 | [User Stories Catalog](./references/user-stories-catalog.md) | Pre-built user stories with acceptance criteria |
-| [Competitive Analysis](./references/competitive-analysis.md) | Comparison with Samsung Fold & Pixel Fold ecosystems |
+| [Competitive Analysis](./references/competitive-analysis.md) | Comparison with Samsung Fold, Pixel Fold & iPad |
+| [App Category Guide](./references/app-category-guide.md) | Pre-built audit profiles per app vertical |
+| [Visual Patterns](./references/visual-patterns.md) | Before → After layout transformation diagrams |
+| [Audit Report Template](./references/audit-report-template.md) | Standardized output format with severity rules |
+| [Engineering Handoff](./references/engineering-handoff.md) | PM→Dev technical translation with code examples |
+| [QA Testing Guide](./references/qa-testing-guide.md) | Structured test matrix for foldable device testing |
 
 
 # Apple HIG Summary: iPhone Duo — PM Edition
@@ -148,6 +168,32 @@ People use iPhone Duo in multiple poses:
 Use adaptive layouts (size classes) and the existing UI will adjust. Focus on
 identifying where your app *should* show more content when extra space is
 available.
+
+### Outer Display Strategy (Don't Forget the "Closed" Phone!)
+Most PM attention goes to the exciting inner display, but the **outer display
+is where users spend the majority of their time**. Key considerations:
+
+1. **It's a compact-width iPhone** — Think iPhone SE form factor. Your app
+   must work well in this constrained space.
+2. **Quick-action workflows matter most** — Users open the outer display for
+   fast tasks: reply to a message, check a notification, glance at a status.
+   Optimize for speed, not depth.
+3. **Dynamic Island is present** — The outer display has a Dynamic Island
+   expanding from the front-facing camera. Plan Live Activities here.
+4. **Vertical side rail is active** — Even on the compact outer display,
+   controls sit on the side, not the bottom. This is the most visible
+   change users will notice.
+5. **Transition to inner must be seamless** — When the user opens the device:
+   - Scroll position MUST be preserved
+   - Form input MUST be retained
+   - Media playback MUST continue without interruption
+   - Navigation state MUST persist (no "going back to home")
+6. **Design for one-handed use** — The outer display is held like a phone.
+   Keep primary actions within thumb reach on the side rail.
+
+**PM Action**: For each screen in your app, answer: "If the user only has 3
+seconds on the outer display, what's the ONE thing they need to see or do?"
+Prioritize that content.
 
 ---
 
@@ -1250,3 +1296,1310 @@ If your app exists on both iOS and Android, consider this approach:
 4. **Sequence wisely**: If your Android app already supports foldables, you have
    a content blueprint. If not, starting with iPhone Duo (less effort due to
    system automation) may be more efficient.
+
+---
+
+## 9. iPad vs. iPhone Duo Inner Display
+
+Many stakeholders will ask: "Isn't the Duo inner display just a small iPad?"
+Here's the comparison:
+
+| Dimension | iPad (10th gen) | iPhone Duo (Inner) |
+|-----------|----------------|-------------------|
+| **Display size** | 10.9" | ~7.5" (estimated) |
+| **Width class** | Regular (always) | Regular (open) / Compact (closed) |
+| **Multitasking** | Slide Over, Split View, Stage Manager | Split View only |
+| **Navigation** | Standard bottom tab or sidebar | Vertical side rail (unique to Duo) |
+| **Keyboard** | Full-size floating or docked | Standard + Laptop mode (fold split) |
+| **Use context** | Desk, couch, dedicated usage | On-the-go, pocketable, quick glances |
+
+### Key Differences for PMs
+1. **iPad is always "open"** — users expect full-featured layouts at all times.
+   Duo requires TWO layout strategies (compact outer + regular inner).
+2. **iPad sidebar ≠ Duo side rail** — iPad sidebar is a content navigation
+   pattern. Duo's side rail is a system-level control surface.
+3. **iPad apps that already use `NavigationSplitView` are 80% Duo-ready** —
+   This is the strongest indicator of conversion readiness.
+4. **Don't ship the iPad layout on Duo** — The inner display is smaller than
+   iPad. Layouts designed for 10.9" will feel cramped at ~7.5". Adjust
+   spacing, font sizes, and content density.
+
+---
+
+## 10. Best-in-Class Foldable App Case Studies
+
+Real-world examples of apps that handle foldable devices well on Android,
+offering lessons for iPhone Duo conversion.
+
+### 10.1 Microsoft Outlook (Samsung Fold)
+**What they did right:**
+- Email list + reading pane split view on inner display
+- Compose window in laptop mode (content top, keyboard bottom)
+- Calendar view expands to show week view on inner display
+- Seamless state transition between cover and inner display
+
+**Lesson for Duo**: Email/productivity apps should prioritize Split View above
+all other features. It's the single biggest UX win.
+
+### 10.2 YouTube (Samsung Fold / Pixel Fold)
+**What they did right:**
+- Video plays at native aspect ratio (no stretching)
+- Flex Mode: video on top half, controls + comments on bottom half
+- Landscape inner display shows video + related videos side-by-side
+- PiP continues when folding the device
+
+**Lesson for Duo**: Video apps should map Flex Mode → Laptop Mode directly.
+Use ArrangementView for the video + comments split.
+
+### 10.3 Google Maps (Pixel Fold)
+**What they did right:**
+- Map expands to fill inner display
+- Search results appear as a persistent side panel (not a bottom sheet)
+- Turn-by-turn navigation adapts to wider display
+- Tabletop mode shows map on top, directions on bottom
+
+**Lesson for Duo**: Map apps gain the most from Split View (map + list).
+Bottom sheets should be reviewed — they may interact poorly with the fold.
+
+### 10.4 Samsung Notes (Samsung Fold)
+**What they did right:**
+- Note list + editor split view on inner display
+- Drawing canvas expands to full inner display
+- Flex Mode: canvas on top, tool palette on bottom
+- Multi-window: Notes + Browser side-by-side for research
+
+**Lesson for Duo**: Note/document apps should use `NavigationSplitView` for
+list + editor, and ArrangementView for canvas + tools.
+
+### 10.5 Spotify (Samsung Fold)
+**What they did right:**
+- Now Playing expands to show lyrics + album art on inner display
+- Queue management visible alongside player controls
+- Flex Mode: album art on top, controls on bottom
+- Cover display shows compact Now Playing widget
+
+**Lesson for Duo**: Music apps should use Arrangement View (album art + lyrics)
+and optimize outer display for glanceable Now Playing.
+
+
+# App Category Guide: iPhone Duo Conversion Profiles
+
+Pre-built audit profiles organized by app vertical. Use this guide to quickly
+identify the most impactful Duo conversion areas for a specific type of app,
+rather than scanning a generic checklist.
+
+---
+
+## How to Use This Guide
+
+1. Identify your app's primary category from the list below
+2. Read the "Top Duo Concerns" — these are the areas most likely to have 🔴
+   Breaking issues for this category
+3. Review the "Primary Wow Factor" — this is the single biggest UX opportunity
+   on Duo for this category
+4. Use the "Audit Focus" checklist to prioritize which PM Checklist items to
+   evaluate first
+
+---
+
+## 1. Social Media / Feed Apps
+*Examples: Facebook, X (Twitter), Instagram, Threads, LinkedIn*
+
+### Top 3 Duo Concerns
+| # | Concern | Why It Breaks |
+|---|---------|---------------|
+| 1 | **Feed posts stretch to full width** | On the wide inner display, a single-column feed with full-width images becomes comically oversized. Text lines become unreadably long. |
+| 2 | **Vertical video (Reels/Shorts) gets pillarboxed** | 9:16 content on a near-square inner display creates huge black bars on both sides. |
+| 3 | **Tab bar text truncation** | Social apps often have 5+ tabs with text labels (Home, Search, Reels, Shop, Profile). All will truncate in the vertical side rail. |
+
+### Primary Wow Factor
+**2-Column Masonry Feed + Arrangement View for Video**
+- Feed: Switch from single-column to 2-column card layout (like Pinterest/iPad) on the inner display. Users see 2× more content per scroll.
+- Video: Use Arrangement View to show video on one side and comments/reactions on the other. No more UI overlaying the creator's content.
+
+### Audit Focus (Priority Order)
+1. ☐ Measure post/card max-width behavior on wide screens
+2. ☐ Identify all vertical video (9:16) playback surfaces
+3. ☐ Count tab bar items and check for text labels
+4. ☐ Check Stories tray horizontal scroll behavior
+5. ☐ Evaluate comment/reply sheet behavior on wide display
+
+### Duo Layout Recommendation
+```
+┌─────────────────────────────────────────────┐
+│  INNER DISPLAY (Open)                       │
+│                                             │
+│  ┌─────────────┐  ┌─────────────┐           │
+│  │  Post Card  │  │  Post Card  │  ← 2-col  │
+│  │  (image +   │  │  (image +   │    feed   │
+│  │   text)     │  │   text)     │           │
+│  ├─────────────┤  ├─────────────┤           │
+│  │  Post Card  │  │  Post Card  │           │
+│  └─────────────┘  └─────────────┘           │
+└─────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────┐
+│  REELS MODE (Arrangement View)               │
+│                                              │
+│  ┌──────────────────┐ ┌───────────────────┐  │
+│  │                  │ │  Comments          │  │
+│  │   9:16 Video     │ │  ─────────────    │  │
+│  │   (native size)  │ │  Like · Reply     │  │
+│  │                  │ │  ─────────────    │  │
+│  │                  │ │  Related Reels    │  │
+│  └──────────────────┘ └───────────────────┘  │
+└──────────────────────────────────────────────┘
+```
+
+---
+
+## 2. Messaging / Chat Apps
+*Examples: WhatsApp, Telegram, Signal, iMessage, Slack, Discord*
+
+### Top 3 Duo Concerns
+| # | Concern | Why It Breaks |
+|---|---------|---------------|
+| 1 | **Chat bubbles stretch too wide** | On the inner display, chat bubbles without max-width become hard to read (line lengths exceed comfortable reading width of ~60-75 characters). |
+| 2 | **Push navigation loses context** | Current flow: tap chat → full screen thread → tap back → return to list. On Duo, this wastes half the screen. |
+| 3 | **Keyboard + fold interaction** | In laptop mode, the fold sits between the chat thread and keyboard. Input bar positioning must respect the fold region. |
+
+### Primary Wow Factor
+**Split View: Chat List + Active Thread**
+The #1 most natural Split View candidate. Left pane shows conversation list, right pane shows the active thread. Users can switch between chats without ever navigating "back." This is the killer use case for foldable messaging.
+
+### Audit Focus (Priority Order)
+1. ☐ Check if app uses `NavigationSplitView` / `UISplitViewController`
+2. ☐ Measure chat bubble max-width constraints
+3. ☐ Test keyboard behavior with custom input bars
+4. ☐ Evaluate group chat / channel list hierarchy depth
+5. ☐ Check media message (photo/video/voice) layout on wide display
+
+### Duo Layout Recommendation
+```
+┌──────────────────────────────────────────────┐
+│  INNER DISPLAY (Split View)                  │
+│                                              │
+│  ┌──────────────┐ ┌──────────────────────┐   │
+│  │ Chat List    │ │ Active Thread        │   │
+│  │              │ │                      │   │
+│  │ ● John  2m  │ │  Hey, are you free?  │   │
+│  │ ► Sarah 5m  │ │         Sure! 👍     │   │
+│  │   Mike  1h  │ │  Great, see you at   │   │
+│  │   Team  3h  │ │  the cafe at 3pm     │   │
+│  │              │ │                      │   │
+│  │              │ │ [Message input bar]  │   │
+│  └──────────────┘ └──────────────────────┘   │
+└──────────────────────────────────────────────┘
+```
+
+---
+
+## 3. Productivity / Document Apps
+*Examples: Notes, Google Docs, Notion, Todoist, Things 3*
+
+### Top 3 Duo Concerns
+| # | Concern | Why It Breaks |
+|---|---------|---------------|
+| 1 | **No sidebar on compact width** | Many productivity apps hide the sidebar/file browser behind a hamburger menu. This is a missed opportunity on the inner display. |
+| 2 | **Editor toolbar overflow** | Rich text editors often have 10+ toolbar items (Bold, Italic, List, Image, etc.). These will aggressively overflow in the vertical rail. |
+| 3 | **Form/input state loss on resize** | Opening/closing the device while editing a form or document must not lose unsaved input. |
+
+### Primary Wow Factor
+**Laptop Mode: Document Preview + Full Keyboard**
+When the device is partially folded at ~90°, the top half shows the document in reading/preview mode, and the bottom half becomes a full-width typing surface with rich formatting toolbar. This mimics a real laptop experience for content creation.
+
+### Audit Focus (Priority Order)
+1. ☐ Check sidebar/drawer pattern (hamburger vs persistent)
+2. ☐ Count editor toolbar items and identify priority actions
+3. ☐ Test state restoration for in-progress edits
+4. ☐ Evaluate document/note list → editor navigation pattern
+5. ☐ Check if app supports iPad multitasking (strong indicator of Duo readiness)
+
+### Duo Layout Recommendation
+```
+┌──────────────────────────────────────────────┐
+│  LAPTOP MODE (Partially Folded ~90°)         │
+│                                              │
+│  ┌──────────────────────────────────────┐    │
+│  │  Document Preview                    │    │
+│  │  ─────────────────────────────       │    │
+│  │  Your text appears here in a         │    │
+│  │  beautiful reading layout...         │    │
+│  ├──────────── FOLD ────────────────┤    │
+│  │  [B] [I] [U] [Link] [List] [📎]     │    │
+│  │  ┌──────────────────────────────┐    │    │
+│  │  │  Full-width keyboard area    │    │    │
+│  │  └──────────────────────────────┘    │    │
+│  └──────────────────────────────────────┘    │
+└──────────────────────────────────────────────┘
+```
+
+---
+
+## 4. E-Commerce / Shopping Apps
+*Examples: Amazon, Shopee, Lazada, Zalora, Temu*
+
+### Top 3 Duo Concerns
+| # | Concern | Why It Breaks |
+|---|---------|---------------|
+| 1 | **Product grid odd columns** | Most e-commerce apps use 2-column grids. On the wider inner display, they may jump to 3 columns — which gets bisected by the fold when partially open. |
+| 2 | **Product detail page wastes space** | Product images that stack vertically above description text will leave huge gaps on the wide inner display. |
+| 3 | **Checkout flow on wide display** | Forms and payment flows designed for narrow screens may look awkward when stretched. |
+
+### Primary Wow Factor
+**Product Image + Details Side-by-Side**
+On the inner display, show the product image gallery on the left and the product details (price, reviews, Add to Cart) on the right. Users can swipe through photos while reading reviews simultaneously — no more scrolling up and down.
+
+### Audit Focus (Priority Order)
+1. ☐ Check product grid column count behavior on wide screens
+2. ☐ Evaluate product detail page layout (stacked vs. side-by-side)
+3. ☐ Test checkout form on wide display (max-width, centering)
+4. ☐ Check image carousel/gallery behavior
+5. ☐ Evaluate search results page grid layout
+
+### Duo Layout Recommendation
+```
+┌──────────────────────────────────────────────┐
+│  PRODUCT DETAIL (Split View)                 │
+│                                              │
+│  ┌──────────────────┐ ┌──────────────────┐   │
+│  │                  │ │ Product Name     │   │
+│  │   [Product       │ │ ⭐⭐⭐⭐½ (2.3k)  │   │
+│  │    Image         │ │                  │   │
+│  │    Gallery]      │ │ $49.99  $79.99   │   │
+│  │                  │ │                  │   │
+│  │  ● ● ● ○ ○      │ │ [Add to Cart]    │   │
+│  │                  │ │ [Buy Now]        │   │
+│  └──────────────────┘ └──────────────────┘   │
+└──────────────────────────────────────────────┘
+```
+
+---
+
+## 5. Video / Streaming Apps
+*Examples: YouTube, Netflix, TikTok, Disney+, Twitch*
+
+### Top 3 Duo Concerns
+| # | Concern | Why It Breaks |
+|---|---------|---------------|
+| 1 | **Aspect ratio mismatch** | 16:9 landscape videos get letterboxed vertically. 9:16 vertical videos get pillarboxed horizontally. Neither fills the inner display well. |
+| 2 | **Full-screen player assumptions** | Many video players assume they own the entire screen. On Duo, they need to coexist with other UI. |
+| 3 | **Player controls overlap fold** | Play/pause, scrubber, and volume controls centered at the bottom may land on the fold region when partially open. |
+
+### Primary Wow Factor
+**Tent Mode: Hands-Free Viewing**
+Place the device in tent mode on a table. The outer display plays the video while the inner display shows playback controls or is turned off to save battery. Perfect for watching while cooking, eating, or working out.
+
+### Audit Focus (Priority Order)
+1. ☐ Check all video aspect ratios supported (16:9, 9:16, 1:1, 4:3)
+2. ☐ Test player controls in partially folded state
+3. ☐ Evaluate PiP (Picture-in-Picture) support
+4. ☐ Check if video + metadata (comments, description) can split
+5. ☐ Test background audio/video behavior on fold
+
+---
+
+## 6. Maps / Navigation Apps
+*Examples: Google Maps, Apple Maps, Waze, Grab, Uber*
+
+### Top 3 Duo Concerns
+| # | Concern | Why It Breaks |
+|---|---------|---------------|
+| 1 | **Map renders at wrong density** | Map tiles rendered for a phone-size viewport may appear too zoomed-in on the wider inner display. |
+| 2 | **Bottom sheet overlap with fold** | Map apps heavily rely on bottom sheets for place details. These may interact poorly with the fold region. |
+| 3 | **Turn-by-turn navigation on fold** | Navigation mode typically uses the full screen. The fold could bisect the map or directions. |
+
+### Primary Wow Factor
+**Map + List/Details Split View**
+Left side: Full interactive map. Right side: Search results list, place details, or turn-by-turn directions. Users can browse the list while seeing all pins on the map simultaneously.
+
+### Audit Focus (Priority Order)
+1. ☐ Check MapKit / Google Maps SDK viewport behavior on wide screens
+2. ☐ Evaluate bottom sheet heights and fold interaction
+3. ☐ Test search results overlay on wider display
+4. ☐ Check turn-by-turn navigation in all poses
+5. ☐ Evaluate ride-sharing pickup/dropoff UI on wide display
+
+---
+
+## 7. Health / Fitness Apps
+*Examples: Apple Health, Strava, MyFitnessPal, Nike Run Club*
+
+### Top 3 Duo Concerns
+| # | Concern | Why It Breaks |
+|---|---------|---------------|
+| 1 | **Dashboard widget grid** | Health apps use dense grids of metric cards. Odd column counts will be bisected by the fold. |
+| 2 | **Chart readability** | Charts designed for compact width may become overly stretched on the inner display. |
+| 3 | **Active workout mode** | During exercise, users may prefer the outer display for glanceable metrics. State must sync. |
+
+### Primary Wow Factor
+**Workout Split: Live Metrics + Route Map**
+During an active workout, show real-time stats (pace, heart rate, distance) on one side and the live route map on the other. No more tapping between screens while running.
+
+---
+
+## 8. Finance / Banking Apps
+*Examples: Banking apps, PayPal, Robinhood, Wise*
+
+### Top 3 Duo Concerns
+| # | Concern | Why It Breaks |
+|---|---------|---------------|
+| 1 | **Biometric auth on fold/unfold** | Apps that require Face ID on every screen transition may trigger unnecessary re-authentication when opening/closing the device. |
+| 2 | **Sensitive data on wide display** | Account balances and transaction details stretched across the full inner display are more visible to people nearby. |
+| 3 | **Transaction list → detail pattern** | This is a classic master-detail but banking apps rarely implement Split View due to security concerns. |
+
+### Primary Wow Factor
+**Account Overview + Transaction Detail Split**
+Left: Account summary with balances. Right: Transaction detail or spending analytics chart. Secure by design — both panes require the same auth level.
+
+---
+
+## Quick Reference Matrix
+
+| Category | #1 Breaking Risk | #1 Wow Factor | Effort |
+|----------|-----------------|---------------|--------|
+| Social/Feed | Feed post width | 2-column Masonry | Large |
+| Messaging | Chat bubble width | Chat List + Thread Split | Medium |
+| Productivity | Toolbar overflow | Laptop Mode Compose | Medium |
+| E-Commerce | Grid odd columns | Product Image + Details | Medium |
+| Video/Streaming | Aspect ratio | Tent Mode Viewing | Large |
+| Maps | Bottom sheet + fold | Map + List Split | Medium |
+| Health/Fitness | Dashboard grid | Workout Stats + Map | Medium |
+| Finance | Biometric re-auth | Account + Transactions | Small |
+
+
+# iPhone Duo Visual Patterns: Before → After
+
+Reference diagrams showing how common UI patterns transform on iPhone Duo.
+Use these to communicate layout changes to stakeholders, designers, and
+engineers.
+
+---
+
+## Pattern 1: Bottom Tab Bar → Vertical Side Rail
+
+The most universal change. Affects virtually every app.
+
+### Before (Standard iPhone)
+```
+┌─────────────────────────────┐
+│  ← Title              ⋯    │  ← Navigation Bar (top)
+│─────────────────────────────│
+│                             │
+│                             │
+│        Content Area         │
+│                             │
+│                             │
+│                             │
+│─────────────────────────────│
+│  🏠    🔍    ➕    🔔    👤  │  ← Tab Bar (bottom)
+└─────────────────────────────┘
+```
+
+### After (iPhone Duo — Outer Display)
+```
+┌───┬──────────────────────┐
+│ ← │                      │
+│───│                      │
+│ 🏠│                      │
+│ 🔍│     Content Area     │
+│ ➕│                      │
+│ 🔔│                      │
+│ 👤│                      │
+│   │                      │
+└───┴──────────────────────┘
+  ↑
+  Vertical Side Rail
+  (icons only, no text)
+```
+
+### Key Change
+- Tab bar items move from horizontal bottom strip to vertical side rail
+- Text labels drop off — **icons must be self-explanatory**
+- Items ordered top-to-bottom by priority
+- 5+ items may overflow into a system "⋯" menu
+
+---
+
+## Pattern 2: Push Navigation → Split View
+
+Applies to any app with list → detail flow (Mail, Chat, Settings, E-Commerce).
+
+### Before (Standard iPhone)
+```
+Screen 1 (List)              Screen 2 (Detail)
+┌─────────────────┐          ┌─────────────────┐
+│  ← Inbox        │  tap →   │  ← Back         │
+│─────────────────│          │─────────────────│
+│ ● John    2m    │ ──────►  │ From: John      │
+│   Sarah   5m    │          │ Subject: Hey    │
+│   Mike    1h    │          │                 │
+│   Team    3h    │          │ Hi, are you     │
+│                 │          │ free tomorrow?  │
+└─────────────────┘          └─────────────────┘
+  (user must tap               (user must tap
+   "Back" to return)            to see list)
+```
+
+### After (iPhone Duo — Inner Display, Split View)
+```
+┌───┬─────────────────┬──────────────────────┐
+│ ← │ Inbox           │ From: John           │
+│───│─────────────────│──────────────────────│
+│ 📥│ ● John    2m    │ Subject: Hey         │
+│ 📤│   Sarah   5m    │                      │
+│ 🗑│   Mike    1h    │ Hi, are you          │
+│ ⋯│   Team    3h    │ free tomorrow?       │
+│   │                 │                      │
+│   │                 │ [Reply] [Forward]    │
+└───┴─────────────────┴──────────────────────┘
+       List Pane             Detail Pane
+       (always visible)      (updates on tap)
+```
+
+### Key Change
+- Both list and detail visible simultaneously
+- No "back" button needed — tap another list item to switch
+- Side rail holds navigation + toolbar items
+- On closing device → collapses back to single-pane push navigation
+
+---
+
+## Pattern 3: Full-Width Feed → Multi-Column Layout
+
+Applies to social media, news, and content discovery apps.
+
+### Before (Standard iPhone)
+```
+┌─────────────────────────────┐
+│ ┌─────────────────────────┐ │
+│ │ 👤 User Name    · 2h    │ │
+│ │ ┌─────────────────────┐ │ │
+│ │ │                     │ │ │
+│ │ │   Full-width image  │ │ │  ← Image stretches
+│ │ │   (takes entire     │ │ │     100% of screen
+│ │ │    screen width)    │ │ │
+│ │ │                     │ │ │
+│ │ └─────────────────────┘ │ │
+│ │ ❤️ 234  💬 45  ↗️ 12    │ │
+│ │ Long caption text that  │ │
+│ │ wraps at screen edge... │ │
+│ └─────────────────────────┘ │
+│ ┌─────────────────────────┐ │
+│ │ 👤 Another Post         │ │
+│ │ ...                     │ │
+└─────────────────────────────┘
+```
+
+### After (iPhone Duo — Inner Display, 2-Column)
+```
+┌───┬───────────────────────────────────────┐
+│ 🏠│ ┌────────────────┐ ┌────────────────┐ │
+│ 🎬│ │ 👤 User  · 2h  │ │ 👤 User2 · 5h │ │
+│ 👥│ │ ┌────────────┐ │ │ ┌────────────┐ │ │
+│ 🔔│ │ │  Image     │ │ │ │  Image     │ │ │
+│ ☰│ │ │  (half     │ │ │ │  (half     │ │ │
+│   │ │ │   width)   │ │ │ │   width)   │ │ │
+│   │ │ └────────────┘ │ │ └────────────┘ │ │
+│   │ │ ❤️ 234 💬 45   │ │ ❤️ 89 💬 12   │ │
+│   │ │ Caption text   │ │ Caption text   │ │
+│   │ └────────────────┘ └────────────────┘ │
+│   │ ┌────────────────┐ ┌────────────────┐ │
+│   │ │ Next post...   │ │ Next post...   │ │
+└───┴───────────────────────────────────────┘
+```
+
+### Key Change
+- Feed switches from 1-column to 2-column card layout
+- Images are constrained to card width (not full screen)
+- Text wraps within card boundaries — much more readable
+- Users see 2× more content per viewport
+- **Fallback**: If 2-column is too complex, at minimum set `max-width: 600pt` and center the single column
+
+---
+
+## Pattern 4: Vertical Video (9:16) → Arrangement View
+
+Applies to Reels, Shorts, TikTok, and any vertical video player.
+
+### Before (Standard iPhone — Full Screen)
+```
+┌─────────────────────────────┐
+│                             │
+│                             │
+│     9:16 Vertical Video     │
+│     fills entire screen     │
+│                             │
+│                    ❤️ 21K   │  ← Buttons overlay
+│                    💬 7K    │     on top of video
+│                    ↗️ 12    │
+│                    💬 Send  │
+│                             │
+│ @creator · Description...   │
+│ 🎵 Original Sound           │
+└─────────────────────────────┘
+```
+
+### After (iPhone Duo — Inner Display, Arrangement View)
+```
+┌───┬──────────────────┬─────────────────────┐
+│ 🏠│                  │  Comments           │
+│ 🎬│                  │  ───────────────    │
+│ 👥│  9:16 Video      │  @user1: Amazing!  │
+│ 🔔│  (native size,   │  @user2: 🔥🔥🔥    │
+│ 👤│   NO overlays)   │  @user3: Tutorial? │
+│   │                  │  ───────────────    │
+│   │                  │  ❤️ 21K  ↗️ 12     │
+│   │                  │  ───────────────    │
+│   │                  │  Related Reels:    │
+│   │                  │  [thumb] [thumb]   │
+│   │  @creator        │  [thumb] [thumb]   │
+└───┴──────────────────┴─────────────────────┘
+       Video Pane           Interaction Pane
+       (clean, no UI)       (comments, actions)
+```
+
+### Key Change
+- Video plays at native 9:16 ratio without pillarbox black bars
+- All interaction UI (likes, comments, share) moves to a dedicated right pane
+- Users can read/write comments without the UI covering the video
+- On closing device → returns to standard full-screen overlay mode
+
+---
+
+## Pattern 5: Laptop Mode (Partially Folded ~90°)
+
+Applies to productivity, messaging, and content creation apps.
+
+### Laptop Mode Layout
+```
+┌──────────────────────────────────────┐
+│                                      │
+│          CONTENT DISPLAY             │
+│    (document, chat thread, video,    │
+│     or camera viewfinder)            │
+│                                      │
+│                                      │
+├════════════════ FOLD ════════════════┤
+│                                      │
+│          CONTROLS / INPUT            │
+│    (keyboard, toolbar, media         │
+│     picker, or game controls)        │
+│                                      │
+└──────────────────────────────────────┘
+```
+
+### Use Cases by App Type
+| App Type | Top Half (Display) | Bottom Half (Controls) |
+|----------|-------------------|----------------------|
+| **Messaging** | Chat thread (scrollable) | Keyboard + emoji picker + attachment bar |
+| **Camera** | Viewfinder preview | Shutter button + mode selector + gallery |
+| **Video Call** | Remote participant video | Self-view + mute/camera/hang-up controls |
+| **Document Editor** | Document preview/reading | Formatting toolbar + keyboard |
+| **Music** | Album art + lyrics | Playback controls + queue |
+
+---
+
+## Pattern 6: Tent Mode (Standing on Edges)
+
+Applies to video, presentation, and shared-viewing apps.
+
+### Tent Mode Layout
+```
+         ┌─────────────────┐
+        ╱                   ╲
+       ╱   OUTER DISPLAY     ╲
+      ╱    (facing viewer)    ╲
+     ╱                         ╲
+    ╱   Shows: video playback,  ╲
+   ╱    presentation slides,     ╲
+  ╱     photo slideshow,          ╲
+ ╱      or event info/QR code     ╲
+╱                                   ╲
+─────────── table surface ───────────
+
+Inner display faces DOWN (off / controls only)
+```
+
+### Use Cases
+| Scenario | Outer Display Shows | Inner Display |
+|----------|--------------------|-----------------------|
+| **Cooking** | Recipe video playing | Off (saves battery) |
+| **Presentation** | Slides for audience | Speaker notes (private) |
+| **Gathering** | Event QR code / schedule | Admin controls |
+| **Music** | Album art + now playing | Queue management |
+
+---
+
+## Pattern 7: Fold-Aware Grid (Even Columns)
+
+Applies to any app with grid/collection views (photos, products, settings).
+
+### Before (Odd Columns — BROKEN)
+```
+┌──────────────────────────────────────────┐
+│  ┌──────┐  ┌──────┐  ┌──────┐           │
+│  │ Item │  │ Item │  │ Item │  ← 3 cols │
+│  └──────┘  └──────┘  └──────┘           │
+│  ┌──────┐  ┌───╫──┐  ┌──────┐           │
+│  │ Item │  │ It╫  │  │ Item │           │
+│  └──────┘  └───╫──┘  └──────┘           │
+│                ╫                         │
+│           FOLD LINE                      │
+│    (bisects middle column! 🔴)           │
+└──────────────────────────────────────────┘
+```
+
+### After (Even Columns — CORRECT)
+```
+┌──────────────────────────────────────────┐
+│  ┌──────┐  ┌──────┐ ║ ┌──────┐ ┌──────┐ │
+│  │ Item │  │ Item │ ║ │ Item │ │ Item │ │
+│  └──────┘  └──────┘ ║ └──────┘ └──────┘ │
+│  ┌──────┐  ┌──────┐ ║ ┌──────┐ ┌──────┐ │
+│  │ Item │  │ Item │ ║ │ Item │ │ Item │ │
+│  └──────┘  └──────┘ ║ └──────┘ └──────┘ │
+│                      ║                    │
+│                 FOLD LINE                 │
+│    (acts as natural divider ✅)           │
+└──────────────────────────────────────────┘
+```
+
+### Rule
+> **Always use EVEN column counts (2, 4, 6) on the inner display when the
+> device is partially folded.** The fold acts as a natural gutter between
+> the two halves.
+
+---
+
+## Quick Reference: Which Pattern Applies?
+
+| If your app has... | Apply Pattern |
+|--------------------|---------------|
+| Bottom tab bar | Pattern 1 (Vertical Rail) |
+| List → Detail navigation | Pattern 2 (Split View) |
+| Content feed (social, news) | Pattern 3 (Multi-Column) |
+| Vertical video (Reels/Shorts) | Pattern 4 (Arrangement View) |
+| Text input / content creation | Pattern 5 (Laptop Mode) |
+| Hands-free viewing scenarios | Pattern 6 (Tent Mode) |
+| Photo/product grids | Pattern 7 (Even Columns) |
+
+
+# iPhone Duo Audit Report — Output Template
+
+Use this standardized format for all Phase 1 App Audit outputs. This ensures
+consistent, comparable reports across different apps and AI tools.
+
+---
+
+## Template
+
+```markdown
+# iPhone Duo Conversion — Phase 1 App Audit Report
+
+**Product**: [App Name]
+**Input Analyzed**: [N] UI Screenshots ([list screen names])
+**Audit Date**: [Date]
+**Target Platform**: iPhone Duo (iOS 26+)
+
+---
+
+## 📊 Executive Summary
+
+[1-2 paragraphs summarizing the app's overall Duo readiness.
+Mention the most critical breaking issue and the biggest opportunity.]
+
+**Overall Readiness Rating**: [Choose one]
+- 🟢 **Duo-Ready** (0 🔴, ≤2 🟡): Ship as-is, enhance later
+- 🟡 **Needs Work** (1–3 🔴 or 3+ 🟡): Fix breaking issues before launch
+- 🔴 **Major Rework** (4+ 🔴): Significant redesign required
+
+**Counts**: [X] 🔴 Breaking, [Y] 🟡 Suboptimal, [Z] 🟢 Compatible
+
+---
+
+## 📱 Screen-by-Screen Analysis
+
+### Screen 1: [Screen Name]
+*Current UI: [Brief description of the screen's current layout]*
+
+| Element | Finding | Severity | Recommendation |
+|---------|---------|----------|----------------|
+| [UI Element] | [What's wrong/right] | 🔴/🟡/🟢 | [Specific fix] |
+| [UI Element] | [What's wrong/right] | 🔴/🟡/🟢 | [Specific fix] |
+
+[Repeat for each screen analyzed]
+
+---
+
+## 📋 Category Scoring Matrix
+
+| Category | 🔴 Breaking | 🟡 Suboptimal | 🟢 Compatible |
+|----------|-------------|---------------|---------------|
+| Layout & Responsiveness | [count] | [count] | [count] |
+| Navigation & Controls | [count] | [count] | [count] |
+| Content Hierarchy | [count] | [count] | [count] |
+| Media & Camera | [count] | [count] | [count] |
+| State & Continuity | [count] | [count] | [count] |
+| Games & Immersive | [count] | [count] | [count] |
+| **Total** | **[X]** | **[Y]** | **[Z]** |
+
+---
+
+## 🚀 Top 3 "Wow Factor" Opportunities
+
+1. **[Feature Name]**: [1-2 sentence description of the opportunity
+   and why it would impress users/Apple]
+2. **[Feature Name]**: [Description]
+3. **[Feature Name]**: [Description]
+
+---
+
+## 🔧 Engineering Questions for Tech Lead
+
+Before proceeding to Phase 2 (PRD), share these questions with your
+engineering team:
+
+1. [Specific technical question based on audit findings]
+2. [Specific technical question]
+3. [Specific technical question]
+
+---
+
+## ➡️ Recommended Next Step
+
+[State whether to proceed to Phase 2 PRD, or if additional screenshots
+are needed, or if the app needs investigation before proceeding.]
+```
+
+---
+
+## Severity Classification Rules
+
+Use these rules to ensure consistent severity ratings across audits:
+
+### 🔴 Breaking (Will malfunction on Duo)
+Assign 🔴 when:
+- UI element uses hardcoded pixel widths that cannot adapt
+- Grid uses odd column count (will be bisected by fold)
+- Tab bar has 5+ items with text labels (will truncate in vertical rail)
+- Custom navigation bar with hardcoded height
+- Content positioned at absolute screen edges (ignores safe areas)
+- Any full-screen video at non-standard aspect ratio without adaptation
+- App is portrait-locked with no landscape support
+
+### 🟡 Suboptimal (Works but misses Duo capabilities)
+Assign 🟡 when:
+- App uses push navigation where Split View would be better
+- Content fills full width without max-width constraint on inner display
+- Toolbar items could benefit from priority ordering but aren't
+- Keyboard/input bar doesn't account for fold region
+- No secondary content panel where one would improve UX
+- Standard components used but not optimized for width
+
+### 🟢 Compatible (Works well, no changes needed)
+Assign 🟢 when:
+- Uses standard system components (UITabBarController, NavigationSplitView)
+- Content uses Auto Layout / SwiftUI layout with flexible constraints
+- Already supports iPad multitasking (strong indicator of Duo readiness)
+- Images and media use aspect-fit or responsive sizing
+- State restoration is implemented for background/foreground transitions
+
+
+# iPhone Duo Conversion — Engineering Handoff Guide
+
+This document bridges the gap between PM output (PRD, Audit) and Engineering
+action. Use it to translate PM findings into specific technical tasks.
+
+---
+
+## How to Use This Document
+
+1. **After Phase 2 (PRD)**: PM shares the Audit Report + PRD with the
+   Engineering Lead.
+2. **Engineering Lead reviews this document** alongside the PRD to create
+   Jira tickets / technical tasks.
+3. **Each section maps to a PRD requirement** and provides the specific
+   API, pattern, or code change needed.
+
+---
+
+## 1. Vertical Side Rail Migration
+
+### What PM Said
+> "Tab bar and toolbar need to work in vertical layout."
+
+### What Engineering Needs to Do
+
+#### If using SwiftUI:
+```swift
+// TabView automatically adapts to vertical rail on Duo.
+// Ensure tab items use Label with SF Symbols:
+TabView {
+    HomeView()
+        .tabItem {
+            Label("Home", systemImage: "house.fill")
+        }
+    SearchView()
+        .tabItem {
+            Label("Search", systemImage: "magnifyingglass")
+        }
+}
+// ✅ SF Symbols will display correctly in vertical rail
+// ❌ Avoid text-only labels — they truncate
+```
+
+#### If using UIKit:
+```swift
+// UITabBarController handles vertical rail automatically.
+// Ensure each tab uses an image:
+let homeTab = UITabBarItem(
+    title: "Home",
+    image: UIImage(systemName: "house.fill"),
+    selectedImage: UIImage(systemName: "house.fill")
+)
+// Title may be hidden in vertical mode — icon must be self-explanatory
+```
+
+#### Toolbar Priority (Critical):
+```swift
+// SwiftUI: Set visibility priority for toolbar items
+.toolbar {
+    ToolbarItem(placement: .primaryAction) {
+        Button("Compose", systemImage: "square.and.pencil") { }
+    }
+    ToolbarItem(placement: .secondaryAction) {
+        Button("Filter", systemImage: "line.3.horizontal.decrease") { }
+    }
+}
+// primaryAction = always visible in rail
+// secondaryAction = may overflow to ⋯ menu
+```
+
+```swift
+// UIKit: Set visibility priority
+let composeButton = UIBarButtonItem(/* ... */)
+composeButton.visibilityPriority = .required  // Always visible
+let filterButton = UIBarButtonItem(/* ... */)
+filterButton.visibilityPriority = .optional   // May overflow
+```
+
+### Checklist
+- [ ] Replace all text-only tab items with SF Symbol icons
+- [ ] Set `visibilityPriority` for all toolbar items
+- [ ] Test overflow menu accessibility
+- [ ] Verify tab bar displays correctly on outer display (compact)
+- [ ] Verify tab bar displays correctly on inner display (regular)
+
+---
+
+## 2. Split View Implementation
+
+### What PM Said
+> "Show list and detail side-by-side on the inner display."
+
+### What Engineering Needs to Do
+
+#### SwiftUI (Preferred):
+```swift
+NavigationSplitView {
+    // Sidebar / List pane
+    List(items) { item in
+        NavigationLink(value: item) {
+            ItemRow(item: item)
+        }
+    }
+    .navigationTitle("Inbox")
+} detail: {
+    // Detail pane
+    if let selectedItem {
+        ItemDetailView(item: selectedItem)
+    } else {
+        Text("Select an item")
+    }
+}
+// Automatically shows split on inner display,
+// collapses to stack on outer display
+```
+
+#### UIKit:
+```swift
+let splitVC = UISplitViewController(style: .doubleColumn)
+splitVC.setViewController(listVC, for: .primary)
+splitVC.setViewController(detailVC, for: .secondary)
+// Set preferred display mode:
+splitVC.preferredDisplayMode = .oneBesideSecondary
+```
+
+### Checklist
+- [ ] Identify all push-navigation flows that are master → detail
+- [ ] Replace `NavigationStack` with `NavigationSplitView` where applicable
+- [ ] Ensure detail pane has a placeholder state ("Select an item")
+- [ ] Test state persistence when switching between split and stack modes
+- [ ] Verify selected item highlighting in list pane
+
+---
+
+## 3. Arrangement Views (New Duo Pattern)
+
+### What PM Said
+> "Show video + comments side-by-side" or "Show map + list together."
+
+### What Engineering Needs to Do
+
+```swift
+// ArrangementView is new in iOS 26 for iPhone Duo
+ArrangementView(.split) {
+    // Primary view (takes priority)
+    VideoPlayerView()
+} secondary: {
+    // Secondary view
+    CommentsListView()
+}
+
+// Overlay arrangement (layers when flat, side-by-side when folded):
+ArrangementView(.overlay) {
+    MapView()
+} secondary: {
+    SearchResultsList()
+}
+```
+
+### Checklist
+- [ ] Identify screens where a secondary view adds value
+- [ ] Choose between `.split` and `.overlay` arrangement
+- [ ] Ensure both views are independently scrollable
+- [ ] Test behavior when closing device (secondary should hide gracefully)
+- [ ] Handle state in both views during transitions
+
+---
+
+## 4. Grid Column Adaptation
+
+### What PM Said
+> "Photo grid must use even columns to avoid fold bisection."
+
+### What Engineering Needs to Do
+
+```swift
+// SwiftUI: Use adaptive grid with minimum item size
+LazyVGrid(columns: [
+    GridItem(.adaptive(minimum: 150))  // System calculates column count
+], spacing: 8) {
+    ForEach(items) { item in
+        ItemCell(item: item)
+    }
+}
+
+// To FORCE even columns, calculate based on available width:
+let columnCount = max(2, Int(availableWidth / idealItemWidth))
+let evenColumnCount = columnCount % 2 == 0 ? columnCount : columnCount - 1
+let columns = Array(repeating: GridItem(.flexible()), count: evenColumnCount)
+```
+
+### Checklist
+- [ ] Audit all grid/collection views in the app
+- [ ] Replace fixed column counts with adaptive or calculated even counts
+- [ ] Test grid at all display widths (outer compact, inner regular)
+- [ ] Verify grid appearance when device is partially folded
+- [ ] Ensure grid items maintain proportional sizes
+
+---
+
+## 5. State Persistence Through Fold/Unfold
+
+### What PM Said
+> "User must not lose their place when opening/closing the device."
+
+### What Engineering Needs to Do
+
+Opening/closing the device triggers a **size class change** (compact ↔ regular).
+This is equivalent to a device rotation. The app must handle this gracefully.
+
+```swift
+// SwiftUI: State is automatically preserved if using @State, @StateObject
+// VERIFY: No state resets in .onChange(of: horizontalSizeClass)
+
+// UIKit: Implement state restoration
+override func encodeRestorableState(with coder: NSCoder) {
+    super.encodeRestorableState(with: coder)
+    coder.encode(scrollOffset, forKey: "scrollOffset")
+    coder.encode(selectedItemID, forKey: "selectedItemID")
+}
+
+override func decodeRestorableState(with coder: NSCoder) {
+    super.decodeRestorableState(with: coder)
+    scrollOffset = coder.decodeFloat(forKey: "scrollOffset")
+    selectedItemID = coder.decodeObject(forKey: "selectedItemID") as? String
+}
+```
+
+### Critical Test Scenarios
+- [ ] Open device while scrolled halfway through a list → position preserved
+- [ ] Open device while typing in a form → text input retained
+- [ ] Open device while playing media → playback continues uninterrupted
+- [ ] Open device while a modal/sheet is presented → modal state preserved
+- [ ] Close device while in split view → collapses to correct single pane
+
+---
+
+## 6. Safe Area & Fold Region Handling
+
+### What PM Said
+> "Content must avoid the fold area and camera regions."
+
+### What Engineering Needs to Do
+
+```swift
+// SwiftUI: Safe areas are automatic IF using standard layouts.
+// For custom views, read safe area:
+GeometryReader { geometry in
+    let safeArea = geometry.safeAreaInsets
+    // safeArea includes fold region when partially open
+    MyCustomView()
+        .padding(safeArea)
+}
+
+// UIKit: Use safeAreaInsets
+override func viewSafeAreaInsetsDidChange() {
+    super.viewSafeAreaInsetsDidChange()
+    // Relayout content to respect new safe areas
+    // (fold region creates additional insets on inner display)
+}
+```
+
+### Checklist
+- [ ] Remove all hardcoded padding/margin values (replace with safe area)
+- [ ] Verify no content draws behind the fold region
+- [ ] Test with Dynamic Island on outer display
+- [ ] Verify custom drawing (Core Graphics, Metal) respects safe areas
+
+---
+
+## 7. Simulator Testing Setup
+
+### Running on iPhone Duo Simulator
+```bash
+# Open Xcode and select iPhone Duo simulator from the device list
+# Or via command line:
+xcrun simctl list devices | grep "iPhone Duo"
+xcrun simctl boot "iPhone Duo"
+```
+
+### Key Simulator Features to Test
+1. **Toggle fold state**: Use the simulator controls to open/close/partially fold
+2. **Rotate**: Test all orientations in both open and closed states
+3. **Multi-window**: Test your app in Split View with another app
+4. **Performance**: Profile with Instruments → ensure no frame drops during
+   fold/unfold animations
+
+### Recommended Test Matrix
+| Pose | Orientation | What to Check |
+|------|------------|---------------|
+| Closed | Portrait | Vertical rail, compact layout, touch targets |
+| Closed | Landscape | Horizontal layout, rail position |
+| Open Flat | Portrait | Split view, content hierarchy, grid columns |
+| Open Flat | Landscape | Full width behavior, max-width constraints |
+| Partially Folded | Book mode | Fold avoidance, content split, grid even columns |
+| Partially Folded | Laptop mode | Top/bottom content split, keyboard behavior |
+
+---
+
+## API Quick Reference
+
+| Task | SwiftUI | UIKit |
+|------|---------|-------|
+| Split View | `NavigationSplitView` | `UISplitViewController` |
+| Arrangement View | `ArrangementView` | `UIArrangementViewController` |
+| Toolbar Priority | `.toolbar { ToolbarItem(placement:) }` | `UIBarButtonItem.visibilityPriority` |
+| Overflow Menu | `ToolbarOverflowMenu` | `additionalOverflowItems` |
+| Tab Bar | `TabView` (auto-adapts) | `UITabBarController` (auto-adapts) |
+| Safe Areas | `GeometryReader.safeAreaInsets` | `view.safeAreaInsets` |
+| Size Class | `@Environment(\.horizontalSizeClass)` | `traitCollection.horizontalSizeClass` |
+| Fold Detection | Safe area insets change | `viewSafeAreaInsetsDidChange()` |
+
+
+# iPhone Duo — QA Testing Guide
+
+Structured testing guide for Quality Assurance teams validating iPhone Duo
+app conversions. Covers all device poses, transition scenarios, edge cases,
+and regression tests.
+
+---
+
+## 1. Test Environment Setup
+
+### Required Tools
+- Xcode with iPhone Duo Simulator (iOS 26+)
+- Physical iPhone Duo device (for final validation — simulator cannot fully
+  replicate fold haptics and hinge angles)
+- Screen recording enabled for bug documentation
+- Accessibility Inspector for VoiceOver testing
+
+### Pre-Test Checklist
+- [ ] App builds and runs on iPhone Duo simulator
+- [ ] Simulator fold controls are accessible (Debug → Simulate Fold)
+- [ ] Both outer and inner displays render content
+- [ ] No immediate crashes on launch
+
+---
+
+## 2. Pose Testing Matrix
+
+Test the app in every device pose. For each pose, verify:
+- Layout renders correctly
+- All controls are accessible
+- Content is readable
+- Touch targets meet 44pt minimum
+
+### 2.1 Closed (Outer Display)
+| # | Test Case | Expected Result | Pass/Fail |
+|---|-----------|-----------------|-----------|
+| 1 | Launch app on outer display | App renders in compact width with vertical side rail | |
+| 2 | Navigate through all tabs | All tabs accessible in vertical rail | |
+| 3 | Scroll through content | Smooth scrolling, content fills width | |
+| 4 | Open a detail screen | Standard push navigation works | |
+| 5 | Interact with toolbar items | All items accessible (visible or overflow) | |
+| 6 | Rotate to landscape | Layout adapts, no clipping | |
+
+### 2.2 Open Flat (Inner Display)
+| # | Test Case | Expected Result | Pass/Fail |
+|---|-----------|-----------------|-----------|
+| 1 | Open device from closed | Layout transitions smoothly to regular width | |
+| 2 | Split View appears (if applicable) | List + Detail shown side-by-side | |
+| 3 | Grid adjusts column count | Even number of columns displayed | |
+| 4 | Content max-width | Text and images don't stretch to full width | |
+| 5 | Tab bar position | Correct placement for current orientation | |
+| 6 | Rotate to landscape | Layout adapts, split view adjusts | |
+
+### 2.3 Partially Folded — Book Mode
+| # | Test Case | Expected Result | Pass/Fail |
+|---|-----------|-----------------|-----------|
+| 1 | Fold device to ~120° | Content avoids fold region | |
+| 2 | Grid layout | Even columns, fold acts as divider | |
+| 3 | Scroll through content | No content hidden behind fold | |
+| 4 | Interactive elements near fold | No buttons/links in fold zone | |
+| 5 | Text readability | Text wraps away from fold | |
+
+### 2.4 Partially Folded — Laptop Mode
+| # | Test Case | Expected Result | Pass/Fail |
+|---|-----------|-----------------|-----------|
+| 1 | Fold device to ~90° (laptop) | Top: content, Bottom: controls | |
+| 2 | Keyboard appears | Keyboard on bottom half, content on top | |
+| 3 | Input bar position | Above keyboard, below fold | |
+| 4 | Scroll while typing | Top content scrolls independently | |
+| 5 | Dismiss keyboard | Content reclaims full inner display | |
+
+### 2.5 Tent Mode
+| # | Test Case | Expected Result | Pass/Fail |
+|---|-----------|-----------------|-----------|
+| 1 | Place device in tent position | Outer display shows content | |
+| 2 | Media playback | Video/audio plays on outer display | |
+| 3 | Controls | If applicable, controls accessible | |
+
+---
+
+## 3. Transition Testing (CRITICAL)
+
+These tests verify the most common failure point: state persistence during
+device open/close transitions.
+
+### 3.1 Outer → Inner Transitions
+| # | Scenario | Expected Result | Pass/Fail |
+|---|----------|-----------------|-----------|
+| 1 | Open while scrolled 50% down a list | Scroll position preserved exactly | |
+| 2 | Open while viewing a detail screen | Detail stays visible (+ list pane appears if Split View) | |
+| 3 | Open while typing in a text field | Text input preserved, cursor position maintained | |
+| 4 | Open while a modal/sheet is displayed | Modal stays presented or gracefully adapts | |
+| 5 | Open while playing audio | Audio continues without interruption | |
+| 6 | Open while playing video | Video continues, player adapts to wider display | |
+| 7 | Open while a menu/popover is shown | Menu repositions or dismisses cleanly | |
+| 8 | Open while a loading spinner is active | Loading continues, no duplicate requests | |
+
+### 3.2 Inner → Outer Transitions (Closing)
+| # | Scenario | Expected Result | Pass/Fail |
+|---|----------|-----------------|-----------|
+| 1 | Close while in Split View | Collapses to current detail pane (or list) | |
+| 2 | Close while scrolled in a grid | Grid reduces columns, scroll position approximate | |
+| 3 | Close while typing | Text preserved, keyboard may re-layout | |
+| 4 | Close while a sheet is half-expanded | Sheet adapts to compact width | |
+| 5 | Close rapidly (quick snap shut) | No crash, no data loss | |
+
+### 3.3 Rapid Transitions (Stress Test)
+| # | Scenario | Expected Result | Pass/Fail |
+|---|----------|-----------------|-----------|
+| 1 | Open and close 10 times rapidly | No memory leak, no crash | |
+| 2 | Open halfway, close, open fully | Correct layout at each stage | |
+| 3 | Rotate while opening | Layout resolves to correct state | |
+
+---
+
+## 4. Navigation & Controls Testing
+
+### 4.1 Vertical Side Rail
+| # | Test Case | Expected Result | Pass/Fail |
+|---|-----------|-----------------|-----------|
+| 1 | All tab items visible | Icons display correctly in vertical orientation | |
+| 2 | Tab overflow (5+ items) | Overflow items accessible via ⋯ menu | |
+| 3 | Active tab indicator | Clear highlight on selected tab in vertical rail | |
+| 4 | Toolbar items priority | High-priority items visible, low-priority overflow | |
+| 5 | Overflow menu | Tapping ⋯ shows all overflowed items | |
+| 6 | Long-press on tab items | Expected behavior (if applicable) | |
+
+### 4.2 Floating Action Buttons
+| # | Test Case | Expected Result | Pass/Fail |
+|---|-----------|-----------------|-----------|
+| 1 | FAB position on outer display | Not overlapping with side rail | |
+| 2 | FAB position on inner display | Not overlapping with side rail or fold | |
+| 3 | FAB tap target | Meets 44pt minimum on all displays | |
+
+---
+
+## 5. Accessibility Testing
+
+### 5.1 VoiceOver
+| # | Test Case | Expected Result | Pass/Fail |
+|---|-----------|-----------------|-----------|
+| 1 | Navigate side rail with VoiceOver | All items announced with descriptive labels | |
+| 2 | Reading order in vertical rail | Top-to-bottom matches visual order | |
+| 3 | Focus moves correctly after transition | Focus doesn't jump to unexpected element on open/close | |
+| 4 | Overflow menu accessible | VoiceOver can open and navigate overflow items | |
+
+### 5.2 Dynamic Type
+| # | Test Case | Expected Result | Pass/Fail |
+|---|-----------|-----------------|-----------|
+| 1 | Large text in vertical rail | Labels scale or hide gracefully | |
+| 2 | Large text in Split View | Both panes remain usable | |
+| 3 | Extra large text on outer display | Content doesn't clip or overlap | |
+
+### 5.3 Reduced Motion
+| # | Test Case | Expected Result | Pass/Fail |
+|---|-----------|-----------------|-----------|
+| 1 | Open/close transitions with reduced motion | Instant transition, no animation | |
+| 2 | Layout changes respect reduced motion | No sliding/fading, just snap | |
+
+---
+
+## 6. Performance Testing
+
+| # | Metric | Target | How to Measure |
+|---|--------|--------|----------------|
+| 1 | Frame rate during fold/unfold | ≥ 60 FPS | Instruments → Core Animation |
+| 2 | Memory usage delta (open vs closed) | < 10% increase | Instruments → Allocations |
+| 3 | Layout computation time | < 16ms per frame | Instruments → Time Profiler |
+| 4 | App launch time on outer display | < 2s | Instruments → App Launch |
+| 5 | Split View render time | < 100ms | Custom timing + Instruments |
+
+---
+
+## 7. Edge Cases
+
+| # | Edge Case | Expected Result | Pass/Fail |
+|---|-----------|-----------------|-----------|
+| 1 | Low Power Mode active | App still adapts layout (no degradation) | |
+| 2 | Background app returns to foreground on different display | Correct layout for current display | |
+| 3 | Notification received during fold transition | Alert displays correctly | |
+| 4 | Screenshot taken during transition | Clean capture, no artifacts | |
+| 5 | Split View with another app (multitasking) | App handles half-screen gracefully | |
+| 6 | Dark Mode on one display, switching | Consistent dark mode across transition | |
+| 7 | Keyboard with third-party input method | Layout still correct with non-system keyboard | |

@@ -213,3 +213,87 @@ If your app exists on both iOS and Android, consider this approach:
 4. **Sequence wisely**: If your Android app already supports foldables, you have
    a content blueprint. If not, starting with iPhone Duo (less effort due to
    system automation) may be more efficient.
+
+---
+
+## 9. iPad vs. iPhone Duo Inner Display
+
+Many stakeholders will ask: "Isn't the Duo inner display just a small iPad?"
+Here's the comparison:
+
+| Dimension | iPad (10th gen) | iPhone Duo (Inner) |
+|-----------|----------------|-------------------|
+| **Display size** | 10.9" | ~7.5" (estimated) |
+| **Width class** | Regular (always) | Regular (open) / Compact (closed) |
+| **Multitasking** | Slide Over, Split View, Stage Manager | Split View only |
+| **Navigation** | Standard bottom tab or sidebar | Vertical side rail (unique to Duo) |
+| **Keyboard** | Full-size floating or docked | Standard + Laptop mode (fold split) |
+| **Use context** | Desk, couch, dedicated usage | On-the-go, pocketable, quick glances |
+
+### Key Differences for PMs
+1. **iPad is always "open"** — users expect full-featured layouts at all times.
+   Duo requires TWO layout strategies (compact outer + regular inner).
+2. **iPad sidebar ≠ Duo side rail** — iPad sidebar is a content navigation
+   pattern. Duo's side rail is a system-level control surface.
+3. **iPad apps that already use `NavigationSplitView` are 80% Duo-ready** —
+   This is the strongest indicator of conversion readiness.
+4. **Don't ship the iPad layout on Duo** — The inner display is smaller than
+   iPad. Layouts designed for 10.9" will feel cramped at ~7.5". Adjust
+   spacing, font sizes, and content density.
+
+---
+
+## 10. Best-in-Class Foldable App Case Studies
+
+Real-world examples of apps that handle foldable devices well on Android,
+offering lessons for iPhone Duo conversion.
+
+### 10.1 Microsoft Outlook (Samsung Fold)
+**What they did right:**
+- Email list + reading pane split view on inner display
+- Compose window in laptop mode (content top, keyboard bottom)
+- Calendar view expands to show week view on inner display
+- Seamless state transition between cover and inner display
+
+**Lesson for Duo**: Email/productivity apps should prioritize Split View above
+all other features. It's the single biggest UX win.
+
+### 10.2 YouTube (Samsung Fold / Pixel Fold)
+**What they did right:**
+- Video plays at native aspect ratio (no stretching)
+- Flex Mode: video on top half, controls + comments on bottom half
+- Landscape inner display shows video + related videos side-by-side
+- PiP continues when folding the device
+
+**Lesson for Duo**: Video apps should map Flex Mode → Laptop Mode directly.
+Use ArrangementView for the video + comments split.
+
+### 10.3 Google Maps (Pixel Fold)
+**What they did right:**
+- Map expands to fill inner display
+- Search results appear as a persistent side panel (not a bottom sheet)
+- Turn-by-turn navigation adapts to wider display
+- Tabletop mode shows map on top, directions on bottom
+
+**Lesson for Duo**: Map apps gain the most from Split View (map + list).
+Bottom sheets should be reviewed — they may interact poorly with the fold.
+
+### 10.4 Samsung Notes (Samsung Fold)
+**What they did right:**
+- Note list + editor split view on inner display
+- Drawing canvas expands to full inner display
+- Flex Mode: canvas on top, tool palette on bottom
+- Multi-window: Notes + Browser side-by-side for research
+
+**Lesson for Duo**: Note/document apps should use `NavigationSplitView` for
+list + editor, and ArrangementView for canvas + tools.
+
+### 10.5 Spotify (Samsung Fold)
+**What they did right:**
+- Now Playing expands to show lyrics + album art on inner display
+- Queue management visible alongside player controls
+- Flex Mode: album art on top, controls on bottom
+- Cover display shows compact Now Playing widget
+
+**Lesson for Duo**: Music apps should use Arrangement View (album art + lyrics)
+and optimize outer display for glanceable Now Playing.

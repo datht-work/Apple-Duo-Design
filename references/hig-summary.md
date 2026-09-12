@@ -46,6 +46,32 @@ Use adaptive layouts (size classes) and the existing UI will adjust. Focus on
 identifying where your app *should* show more content when extra space is
 available.
 
+### Outer Display Strategy (Don't Forget the "Closed" Phone!)
+Most PM attention goes to the exciting inner display, but the **outer display
+is where users spend the majority of their time**. Key considerations:
+
+1. **It's a compact-width iPhone** — Think iPhone SE form factor. Your app
+   must work well in this constrained space.
+2. **Quick-action workflows matter most** — Users open the outer display for
+   fast tasks: reply to a message, check a notification, glance at a status.
+   Optimize for speed, not depth.
+3. **Dynamic Island is present** — The outer display has a Dynamic Island
+   expanding from the front-facing camera. Plan Live Activities here.
+4. **Vertical side rail is active** — Even on the compact outer display,
+   controls sit on the side, not the bottom. This is the most visible
+   change users will notice.
+5. **Transition to inner must be seamless** — When the user opens the device:
+   - Scroll position MUST be preserved
+   - Form input MUST be retained
+   - Media playback MUST continue without interruption
+   - Navigation state MUST persist (no "going back to home")
+6. **Design for one-handed use** — The outer display is held like a phone.
+   Keep primary actions within thumb reach on the side rail.
+
+**PM Action**: For each screen in your app, answer: "If the user only has 3
+seconds on the outer display, what's the ONE thing they need to see or do?"
+Prioritize that content.
+
 ---
 
 ## 2. Best Practices (Translated for PM/UX)

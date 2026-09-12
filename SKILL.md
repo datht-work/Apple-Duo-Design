@@ -40,24 +40,35 @@ The agent MUST ask for one or more of the following inputs before proceeding:
 
 ## Workflow: 4 Phases
 
+### Phase 0: App Category Detection (Automatic)
+Before starting the audit, identify the app's category and load the relevant
+audit profile from [App Category Guide](./references/app-category-guide.md):
+- Social/Feed, Messaging, Productivity, E-Commerce, Video/Streaming,
+  Maps/Navigation, Health/Fitness, Finance/Banking
+- Use the category's "Top 3 Duo Concerns" to prioritize audit focus
+- If user has already completed an earlier phase, skip to the requested phase
+
 ### Phase 1: App Audit
 1. Ask the user for app screenshots or Figma exports (see Accepted Inputs above)
-2. Analyze each screen against the [PM Checklist](./references/pm-checklist.md)
-3. Read the [HIG Summary](./references/hig-summary.md) for iPhone Duo requirements
-4. Identify impacted areas and classify by severity:
-   - 🔴 **Breaking** — Will not function correctly on Duo (e.g., fixed layouts, hardcoded widths)
-   - 🟡 **Suboptimal** — Works but misses Duo capabilities (e.g., no split view expansion)
+2. Identify the app category and load the matching profile from [App Category Guide](./references/app-category-guide.md)
+3. Analyze each screen against the [PM Checklist](./references/pm-checklist.md)
+4. Read the [HIG Summary](./references/hig-summary.md) for iPhone Duo requirements
+5. Classify findings by severity using the rules in [Audit Report Template](./references/audit-report-template.md):
+   - 🔴 **Breaking** — Will not function correctly on Duo (e.g., fixed layouts, odd-column grids, text-only tab bars)
+   - 🟡 **Suboptimal** — Works but misses Duo capabilities (e.g., no split view, no max-width on content)
    - 🟢 **Compatible** — Already adapts well (e.g., uses standard system components)
-5. Output: **Audit Report** with severity ratings per screen/component
+6. Reference [Visual Patterns](./references/visual-patterns.md) to show Before → After layout diagrams
+7. Output: **Audit Report** following the format in [Audit Report Template](./references/audit-report-template.md)
 
 ### Phase 2: PRD Generation
 1. Use the [PRD Template](./references/prd-template.md) as the base
 2. Fill in findings from Phase 1
 3. Include competitive context from [Competitive Analysis](./references/competitive-analysis.md)
 4. Recommend which features to adapt vs. which to redesign
-5. Recommend "Wow Factor" features that leverage Duo capabilities for App Store featuring potential.
-6. Define success metrics and KPIs
-7. Output: **Draft PRD** ready for stakeholder review
+5. Recommend "Wow Factor" features that leverage Duo capabilities for App Store featuring potential
+6. Include Apple Ecosystem Synergy opportunities (Continuity, Dynamic Island, Tent Mode)
+7. Define success metrics and KPIs
+8. Output: **Draft PRD** ready for stakeholder review
 
 ### Phase 3: User Stories
 1. Reference the [User Stories Catalog](./references/user-stories-catalog.md)
@@ -74,7 +85,9 @@ The agent MUST ask for one or more of the following inputs before proceeding:
 2. Prioritize based on Effort vs. Impact (Business Value vs. Technical Cost)
 3. Estimate PM-level effort (S/M/L) per story
 4. Identify dependencies and risks
-5. Output: **Phasing Roadmap** with timeline recommendations
+5. Include [Engineering Handoff](./references/engineering-handoff.md) checklist for Dev team
+6. Reference [QA Testing Guide](./references/qa-testing-guide.md) for test planning
+7. Output: **Phasing Roadmap** with timeline recommendations
 
 ## Key Principles
 
@@ -86,9 +99,11 @@ The agent MUST ask for one or more of the following inputs before proceeding:
    Duo-specific features are enhancements, not requirements
 4. **Apple-native focus**: This skill is exclusively for iPhone Duo. Competitive
    references are for context only — all recommendations follow Apple HIG
-5. **Strategic Go-To-Market Focus**: Emphasize how being a Day 1 iPhone Duo app 
-   can drive user acquisition and App Store featuring. Factor Apple Ecosystem 
+5. **Strategic Go-To-Market Focus**: Emphasize how being a Day 1 iPhone Duo app
+   can drive user acquisition and App Store featuring. Factor Apple Ecosystem
    synergy (Continuity, Apple Watch) into the PRD.
+6. **Output language**: Match the user's input language. If user writes in
+   Vietnamese, output in Vietnamese. If English, output in English.
 
 ## Reference Documents
 
@@ -98,4 +113,9 @@ The agent MUST ask for one or more of the following inputs before proceeding:
 | [PM Checklist](./references/pm-checklist.md) | Screen-by-screen audit checklist |
 | [PRD Template](./references/prd-template.md) | Ready-to-fill PRD for conversion projects |
 | [User Stories Catalog](./references/user-stories-catalog.md) | Pre-built user stories with acceptance criteria |
-| [Competitive Analysis](./references/competitive-analysis.md) | Comparison with Samsung Fold & Pixel Fold ecosystems |
+| [Competitive Analysis](./references/competitive-analysis.md) | Comparison with Samsung Fold, Pixel Fold & iPad |
+| [App Category Guide](./references/app-category-guide.md) | Pre-built audit profiles per app vertical |
+| [Visual Patterns](./references/visual-patterns.md) | Before → After layout transformation diagrams |
+| [Audit Report Template](./references/audit-report-template.md) | Standardized output format with severity rules |
+| [Engineering Handoff](./references/engineering-handoff.md) | PM→Dev technical translation with code examples |
+| [QA Testing Guide](./references/qa-testing-guide.md) | Structured test matrix for foldable device testing |
